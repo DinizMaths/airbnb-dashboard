@@ -20,7 +20,7 @@ h1.image('images/airbnb.png', width = 100)
 h2.title("Airbnb - New York")
 h2.markdown("O código para este dashboard está disponível em: [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/DinizMaths/airbnb-dashboard)")
 
-st.markdown("Fundada em 2008 e com sede em San Francisco - Califórnia, o Airbnb é uma empresa americana que opera um mercado online para hospedagem. O Airbnb não é proprietário de nenhuma das propriedades listadas; em vez disso, obtém lucro ao receber comissão de cada reserva realizada.")
+st.markdown("Fundada em 2008 e com sede em San Francisco - Califórnia, o Airbnb é uma empresa americana que opera um mercado online para hospedagem. O Airbnb não é proprietário de nenhuma das propriedades listadas, o lucro é obtido ao receber comissão de cada reserva realizada.")
 
 ## TABS
 tab1, tab2, tab3, tab4 = st.tabs(["DataFrame", "HistogramPlot", "MapPlot", "ViolinPlot"])
