@@ -26,19 +26,21 @@ st.markdown("Fundada em 2008 e com sede em San Francisco - Califórnia, o Airbnb
 tab1, tab2, tab3, tab4 = st.tabs(["DataFrame", "HistogramPlot", "MapPlot", "ViolinPlot"])
 
 with tab1:
+  st.markdown("Abaixo se encontra o dataframe utilizado para a analise")
+
   st.dataframe(
     data=airbnb,
     width=1680
   )
 
 with tab2:
-  st.markdown("")
+  st.markdown("Abaixo é possível observar as distribuições com relação ao tipo de quarto ofertado")
 
-  categorias = airbnb["room_type"].unique()
-  contagem   = airbnb["room_type"].value_counts()
+  categories = airbnb["room_type"].unique()
+  count      = airbnb["room_type"].value_counts()
 
   fig = go.Figure(data=[
-    go.Bar(x=categorias, y=contagem)
+    go.Bar(x=categories, y=count, marker=dict(color="#F05B61"))
   ])
 
   fig.update_layout(
@@ -74,14 +76,17 @@ with tab3:
   st.plotly_chart(fig)
 
 with tab4:
+  st.markdown("Abixo é mostrada uma comparação entre os tipos de quartos e o preço a partir do gráfico de violino")
+
   fig = go.Figure()
 
   fig.add_trace(go.Violin(
     y=airbnb["room_type"],
     x=airbnb["price"],
-    fillcolor='lightseagreen',
+    fillcolor='#F05B61',
     opacity=0.7,
-    orientation='h'
+    orientation='h',
+    marker=dict(color="#D0555A")
   ))
 
   fig.update_layout(
