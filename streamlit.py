@@ -84,7 +84,7 @@ with tab4:
     y=airbnb["room_type"],
     x=airbnb["price"],
     fillcolor='#F05B61',
-    opacity=0.7,
+    opacity=1,
     orientation='h',
     marker=dict(color="#D0555A")
   ))
