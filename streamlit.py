@@ -5,10 +5,31 @@ import pandas    as pd
 import plotly.express       as px
 import plotly.graph_objects as go
 
+import joblib
+from sklearn.preprocessing import LabelEncoder
+
 
 # DATA
 airbnb = pd.read_csv("data/airbnb.csv")
 
+# MODEL
+model = joblib.load('random_forest_model.pkl')
+
+neighbourhood_group_labels  = list(airbnb["neighbourhood_group"].unique())
+neighbourhood_group_encoder = LabelEncoder()
+neighbourhood_group_numbers = neighbourhood_group_encoder.fit_transform(neighbourhood_group_labels)
+
+neighbourhood_labels  = list(airbnb["neighbourhood"].unique())
+neighbourhood_encoder = LabelEncoder()
+neighbourhood_numbers = neighbourhood_encoder.fit_transform(neighbourhood_labels)
+
+room_type_labels  = list(airbnb["room_type"].unique())
+room_type_encoder = LabelEncoder()
+room_type_numbers = room_type_encoder.fit_transform(room_type_labels)
+
+neighbourhood_group_encoder_dict = dict(zip(neighbourhood_group_labels, neighbourhood_group_numbers))
+neighbourhood_encoder_dict = dict(zip(neighbourhood_labels, neighbourhood_numbers))
+room_type_encoder_dict = dict(zip(room_type_labels, room_type_numbers))
 
 # STREAMLIT PAGE
 st.set_page_config(layout="wide")
@@ -23,7 +44,7 @@ h2.markdown("O código para este dashboard está disponível em: [![GitHub](http
 st.markdown("Fundada em 2008 e com sede em San Francisco - Califórnia, o Airbnb é uma empresa americana que opera um mercado online para hospedagem. O Airbnb não é proprietário de nenhuma das propriedades listadas, o lucro é obtido ao receber comissão de cada reserva realizada.")
 
 ## TABS
-tab1, tab2, tab3, tab4 = st.tabs(["DataFrame", "HistogramPlot", "MapPlot", "ViolinPlot"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["DataFrame", "HistogramPlot", "MapPlot", "ViolinPlot", "Predict"])
 
 with tab1:
   st.markdown("Abaixo se encontra o dataframe utilizado para a analise")
@@ -96,3 +117,23 @@ with tab4:
   )
 
   st.plotly_chart(fig)
+
+with tab5:
+  st.markdown("Abixo é mostrada uma comparação entre os tipos de quartos e o preço a partir do gráfico de violino")
+
+  col1, col2, col3, col4 = st.columns(4)
+
+  with col1:
+    feature1 = st.selectbox("neighbourhood_group", list(airbnb["neighbourhood_group"].unique()))
+  with col2:
+    feature2 = st.selectbox("neighbourhood", list(airbnb["neighbourhood"].unique()))
+  with col3:
+    feature3 = st.selectbox("room_type", list(airbnb["room_type"].unique()))
+  with col4:
+    feature4 = st.number_input("minimum_nights", value=1, step=1, min_value=1)
+
+  if st.button('Predict Price'):
+    new_data = pd.DataFrame([[neighbourhood_group_encoder_dict[feature1], neighbourhood_encoder_dict[feature2], room_type_encoder_dict[feature3], feature4]], columns=["neighbourhood_group", "neighbourhood", "room_type", "minimum_nights"])
+    pred = model.predict(new_data)
+
+    st.markdown(f"### Valor Predito: ${pred[0]:.2f}")
